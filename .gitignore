@@ -1,0 +1,33 @@
+.idea/
+.vscode/
+
+# secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+kubeconfig
+*.kubeconfig
+credentials
+.vault_pass*
+
+# terraform / opentofu
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!example.tfvars
+crash.log
+
+# ansible
+*.retry
+
+# misc
+node_modules/
+bin/
+*.log
+*.tar
+*.tar.gz
