@@ -84,7 +84,7 @@ Qisqartirilmaydi: `linux` to'liq, `network` 3–6, `docker` 1–4, `cloud` 2–4
 - [ ] Hafta 1–3: linux 1–7. Hozir 1-dars (`linux/docs/01-intro.md` → `linux/01-intro/`)
 - [ ] Hafta 4–7: linux 8–13
 - Batafsil holat: `PROGRESS.md` (indeks) va `linux/docs/PROGRESS.md`
-- Darslar holati: 64 darsdan 15 tasi yangi (batafsil, ikki mashinaga mos) formatda: linux 1, 6, 8, 10–13; git 1–2; network 1, 2, 4; cloud 1; iac 1, 3. Qolgan 49 tasi hali birinchi variantda. Hammasi o'tkazilgach vaqt chizig'i qayta hisoblanadi (darslar vaqti taxminan 1.5 baravar oshadi).
+- Darslar holati: 64 darsdan 26 tasi yangi (batafsil, ikki mashinaga mos) formatda: linux 1–13 (modul to'liq); git 1–4 (modul to'liq); network 1–6 (modul to'liq); cloud 1; iac 1, 3. Qolgan 38 tasi hali birinchi variantda. Hammasi o'tkazilgach vaqt chizig'i qayta hisoblanadi (darslar vaqti taxminan 1.5 baravar oshadi).
 
 ### Temp: reja bilan solishtirish
 

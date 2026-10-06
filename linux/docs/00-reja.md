@@ -1,5 +1,7 @@
 # Linux o'quv rejasi (operatsion tizimlar: buyruq satridan server ekspluatatsiyasigacha)
 
+Kim uchun: frontend dasturchi (TS/Node), backend va ops'ni endi o'rganmoqda. Terminalda `cd`, `ls`, `git` va `npm` darajasida ishlagan, lekin operatsion tizimning o'zi (kernel, jarayonlar, ruxsatlar, servislar, disklar) yangi soha deb olinadi. Shuning uchun darslar hech narsani "tanish" deb o'tkazib yubormaydi: har atama birinchi uchraganda ta'riflanadi, har mavzu mexanizmi va ishlaydigan misoli bilan beriladi.
+
 Ishlash tartibi: men nazariya va vazifalar beraman, siz buyruqlarni laboratoriyada bajarib javoblarni `README.md` ga yozasiz, men buyruqlar, natija talqini va tushuntirishlarni tekshirib xato va xavfli odatlarni ko'rsataman.
 Har dars uchun alohida papka: `linux/01-intro/`, `linux/02-distros/` va hokazo. Yaratish: `make new m=linux n=01 name=intro`.
 
@@ -7,17 +9,15 @@ Kurs yo'l xaritasidagi mavzular: "Linuxga kirish", "Distributivlar (Debian-based
 
 ## Vaqt hisobi
 
-Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan.
+Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan. Har darsning muddati o'sha darsning `Taxminiy vaqt` qatorida, bu jadval ularning yig'indisi. Hafta 5 o'quv kuni deb olinadi.
 
-| Bosqich | Darslar | Muddat (2–2.5 soat/kun) | Siz uchun | Sabab |
-|---------|---------|--------------------------|-----------|-------|
-| I - Asoslar | 4 | 11–12 kun | 8–9 kun | Terminal, `cd`, `ls`, git va npm tanish. Yangi: kernel va distributiv chegarasi, boot, FHS, oilalar farqi, Vim grammatikasi. Vim mashqi qisqartirilmaydi |
-| II - Shell va matn | 3 | 12–13 kun | 9–11 kun | `process.env`, npm skriptlar va JS regex tajribasi yordam beradi. Quoting, startup fayllar, ruxsat modeli, `awk` yangi va keyingi hamma modulda kerak, shoshilmang |
-| III - Tizim boshqaruvi | 4 | 11–12 kun | 9 kun | Butunlay yangi soha: load va xotira talqini, signal'lar, foydalanuvchi va guruhlar, systemd unit'lar |
-| IV - Paketlar va disklar | 2 | 6–7 kun | 5–6 kun | `apt install` tanish; repo va imzolar, inode, mount, swap, LVM yangi. Oxirida mini-loyiha |
-| **Jami** | **13** | **40–44 kun** | **31–35 kun (taxminan 6–7 hafta)** | |
-
-Dars bo'yicha taqsimot (siz uchun): 1-dars 2 kun, 2-dars 2 kun, 3-dars 2 kun, 4-dars 2–3 kun, 5-dars 3–4 kun, 6-dars 3 kun, 7-dars 3–4 kun, 8-dars 2 kun, 9-dars 2 kun, 10-dars 2 kun, 11-dars 3 kun, 12-dars 2 kun, 13-dars 3–4 kun.
+| Bosqich | Darslar | Dars bo'yicha (kun) | Siz uchun | Sabab |
+|---------|---------|---------------------|-----------|-------|
+| I - Asoslar | 4 | 1-dars: 3, 2-dars: 3, 3-dars: 3, 4-dars: 4 | 13 kun | Kernel va distributiv chegarasi, boot, FHS, oilalar farqi, `find`, Vim grammatikasi. Hammasi VM ichida qo'lda bajariladi, Vim mashqi qisqartirilmaydi |
+| II - Shell va matn | 3 | 5-dars: 5, 6-dars: 5, 7-dars: 5 | 15 kun | Quoting, startup fayllar, ruxsat modeli, regex dialektlari va `awk` keyingi hamma modulda kerak, shoshilmang |
+| III - Tizim boshqaruvi | 4 | 8-dars: 3, 9-dars: 3, 10-dars: 3, 11-dars: 5 | 14 kun | Butunlay yangi soha: load va xotira talqini, signal'lar, foydalanuvchi va guruhlar, systemd unit'lar |
+| IV - Paketlar va disklar | 2 | 12-dars: 3, 13-dars: 5 | 8 kun | Repo va imzolar, inode, mount, swap, LVM. Oxirida mini-loyiha |
+| **Jami** | **13** | | **50 kun (10 hafta)** | |
 
 Bir mavzuni "o'rgandim" deyish mezoni: vazifalar bajarilgan, men tekshirib tasdiqlaganman, va siz mexanizmni (nima uchun shunday ishlashini) o'z so'zingiz bilan, buyruqqa qaramasdan tushuntira olasiz.
 
@@ -25,12 +25,19 @@ Bu modul qolgan hamma modulning poydevori: Docker (namespace, cgroup, PID 1, vol
 
 ## Laboratoriya
 
-- **Ish mashinasi (Zorin OS 18, Ubuntu 24.04 asosida)**: faqat o'qiydigan buyruqlar (`ls`, `cat`, `ps`, `man`, `journalctl`, `find`) va ish papkasidagi fayllar. Tizim holatini o'zgartiradigan hech narsa bu yerda bajarilmaydi. Ish mashinasidagi shell `zsh`, serverlarda esa bash: shell'ga bog'liq vazifalar bash'da bajariladi.
-- **Multipass VM `lab` (Ubuntu 24.04)**: asosiy laboratoriya, 2-darsda quriladi. O'rnatish: `sudo snap install multipass` (hujjat: https://documentation.ubuntu.com/multipass/). Foydalanuvchi, guruh, `sudoers`, systemd unit, paket, disk, swap, LVM, firewall bilan bog'liq hamma narsa shu yerda. Xavfli vazifadan oldin snapshot olinadi (`multipass snapshot`), buzilsa `multipass restore`.
-- **Docker konteynerlar**: bir martalik tajribalar va RPM oilasi uchun: `docker run --rm -it ubuntu:24.04 bash`, `docker run --rm -it rockylinux:9 bash`. Konteynerda systemd, boot va alohida kernel yo'q, shuning uchun 8–11 va 13-darslar VM'da.
-- **Ma'lumot**: 7-darsda haqiqiy nginx access logi yuklab olinadi, repo tashqarisida (`~/lab-data`) saqlanadi va commit qilinmaydi.
-- **Tozalash**: har dars oxirida vaqtinchalik konteynerlar o'chiriladi (`docker ps -a`), VM to'xtatiladi (`multipass stop lab`). Modul oxirida: `multipass delete lab && multipass purge`.
-- Javoblar `README.md` ga, skriptlar (`task_N.sh`) ish papkasiga. Topshirishdan oldin `make check` toza bo'lishi kerak (skriptlar `shellcheck` dan o'tadi).
+Kurs ikki mashinada o'tiladi: ofisda Zorin OS 18 (Ubuntu 24.04 asosida, `amd64`), uyda macOS (Apple Silicon, `arm64`). Har dars ikkalasida bir xil bajariladi. Asboblarni o'rnatish va `lab` VM'ni yaratish ildizdagi `SETUP.md` da (Multipass: Zorin'da snap, macOS'da Homebrew), 1-darsdan oldin bir marta, har mashinada alohida. Har darsning "Laboratoriya" bo'limida "Zorin (ofis) / macOS (uy)" jadvali bor.
+
+| Muhit | Nima uchun | Qoidasi |
+|-------|-----------|---------|
+| Host (Zorin yoki macOS) | `make`, `git`, `multipass`, `docker` buyruqlari va ish papkasidagi fayllar | tizim holati o'zgartirilmaydi. macOS Linux emas (`/proc`, `systemctl`, `apt`, GNU flag'lar yo'q), Zorin'da esa ish mashinasini buzish xavfi bor, shuning uchun Linux vazifalari host'da bajarilmaydi. Host'dagi shell `zsh` bo'lishi mumkin, serverlarda bash |
+| Multipass VM `lab` (Ubuntu 24.04, 2 CPU, 2G, 10G) | asosiy laboratoriya: barcha Linux buyruqlari, foydalanuvchi, guruh, `sudoers`, systemd unit, paket, disk, swap, LVM | `SETUP.md` bo'yicha yaratilgan, 2-darsda chuqur o'rganiladi. Xavfli vazifadan oldin snapshot (`multipass snapshot`), buzilsa `multipass restore`. Ikkala host'da bir xil Ubuntu, farqi faqat arxitektura |
+| Docker konteynerlar | bir martalik tajribalar va RPM oilasi: `docker run --rm -it ubuntu:24.04 bash`, `docker run --rm -it rockylinux:9 bash` | host'da ishga tushiriladi. Konteynerda systemd, boot va alohida kernel yo'q, shuning uchun 8–11 va 13-darslar VM'da. macOS'da konteyner Docker Desktop'ning yashirin Linux VM'ida ishlaydi |
+
+- **Holat ko'chishi**: laboratoriya holati (VM ichidagi fayllar, foydalanuvchilar, paketlar, snapshot'lar) mashinalar orasida ko'chmaydi, javoblar git orqali ko'chadi. Dars oldingi dars holatiga tayansa, uni ikkinchi mashinada qanday tiklash o'sha darsning "Laboratoriya" bo'limida yozilgan.
+- **Skriptlar**: `task_N.sh` ish papkasida (host'da) yoziladi, VM'ga `multipass transfer` bilan ko'chirib sinaladi.
+- **Ma'lumot**: 7-darsda haqiqiy nginx access logi VM ichiga yuklab olinadi (`~/lab-data`), repoga kirmaydi va commit qilinmaydi.
+- **Tozalash**: har dars oxirida vaqtinchalik konteynerlar o'chiriladi (`docker ps -a`), VM to'xtatiladi (`multipass stop lab`). `lab` VM keyingi modullarda ham kerak, shuning uchun modul oxirida o'chirilmaydi.
+- Javoblar `README.md` ga, skriptlar ish papkasiga. Topshirishdan oldin host'da `make check` toza bo'lishi kerak (skriptlar `shellcheck` dan o'tadi: Zorin'da `sudo apt install shellcheck`, macOS'da `brew install shellcheck`).
 
 ## I bosqich - Asoslar
 1. **Linuxga kirish**: kernel va user space, distributiv nima, boot ketma-ketligi (firmware, GRUB, kernel, initramfs, systemd), FHS, `/proc` va `/sys`, terminal, TTY va shell farqi, builtin va tashqi buyruq, `man` bo'limlari, `--help`, `help`, `tldr`

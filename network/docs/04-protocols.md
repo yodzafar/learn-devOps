@@ -8,7 +8,7 @@ Qanday o'qish kerak: har bo'limdagi misolni VM ichida o'zingiz terib ishga tushi
 
 ## Laboratoriya
 
-`SETUP.md` bo'yicha yaratilgan `lab` VM kerak. Bu dars qo'shimcha ikkita VM yaratadi: `net1` va `net2` (Ubuntu 24.04). Ular 5 va 6-darslarda ham ishlatiladi, dars oxirida o'chirmang. Host'da (ikkala mashinada bir xil):
+`SETUP.md` bo'yicha yaratilgan `lab` VM kerak. Bu dars qo'shimcha ikkita VM yaratadi: `net1` va `net2` (Ubuntu 24.04). Ular 6-darsda ham ishlatiladi (5-dars faqat `lab` VM ichidagi namespace'larda o'tadi), dars oxirida o'chirmang. Host'da (ikkala mashinada bir xil):
 
 ```
 multipass launch 24.04 --name net1 --cpus 1 --memory 1G --disk 5G
@@ -37,7 +37,7 @@ docker run -d --name mailpit -p 127.0.0.1:1025:1025 -p 127.0.0.1:8025:8025 axlle
 SMTP `127.0.0.1:1025` da, web interfeys `http://localhost:8025` da.
 
 - **Ikkinchi mashinada tiklash**: laboratoriya holati git orqali ko'chmaydi. Ikkinchi mashinada `net1`, `net2` ni yuqoridagi buyruqlar bilan yarating, o'sha mashinada yangi `~/.ssh/lab_ed25519` kalit yarating (private kalitni mashinalar orasida ko'chirmang), public kalitni VM'larga qo'shing va `~/.ssh/config` ga o'sha mashinadagi IP'lar bilan yozuv qo'shing (13-vazifa qadamlari). Javoblar (`README.md`, `probe.sh` va boshqalar) `git pull` bilan keladi.
-- **Tozalash**: `docker rm -f mailpit`; `~/.ssh/config` dan laboratoriya yozuvlarini va `~/.ssh/lab_ed25519*` ni o'chirish; VM'lar 5 va 6-darslarda kerak, `multipass stop net1 net2`.
+- **Tozalash**: `docker rm -f mailpit`; `~/.ssh/config` dan laboratoriya yozuvlarini va `~/.ssh/lab_ed25519*` ni o'chirish; VM'lar 6-darsda kerak, `multipass stop net1 net2`.
 
 | Mashina | Bu darsda nima farq qiladi |
 |---------|----------------------------|
@@ -743,7 +743,7 @@ Tayyor bo'lgach:
 1. `README.md` da 22 ta vazifa; `ssh_config.example`, `sshd_hardening.conf`, `mail.txt`, `probe.sh` papkada.
 2. `make check` toza (`shellcheck` va `make secrets` ham): papkada private kalit, haqiqiy IP'li config yo'q.
 3. Mailpit o'chirilgan, `net1` dagi `/etc/hosts` o'zgarishi, `chmod 777` va vaqtinchalik search domeni qaytarilgan, host'da ochiq tunnel, VM'larda qolgan `nc` va `python3` jarayonlari yo'q.
-4. `multipass list` da `net1`, `net2` bor (5-dars uchun kerak), `ssh net1` va `ssh net2` ishlaydi.
+4. `multipass list` da `net1`, `net2` bor (6-dars uchun kerak), `ssh net1` va `ssh net2` ishlaydi.
 5. Menga xabar bering, tekshiraman.
 
 ### O'zini tekshirish savollari (kodsiz, o'z so'zingiz bilan javob bering)

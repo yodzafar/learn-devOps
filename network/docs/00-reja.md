@@ -27,7 +27,7 @@ Kurs ikki mashinada o'tiladi: ofisda Zorin OS (Linux, `amd64`), uyda macOS (Appl
 | Host (Zorin yoki macOS) | `make`, `git`, `multipass`, `docker` buyruqlari; ixtiyoriy kuzatuv (Zorin: `ip -br addr`, macOS: `ifconfig`, `arp -a`, `netstat -rn`, `networksetup`) | hech narsa o'zgartirilmaydi: interfeys, route, firewall, sysctl'ga tegilmaydi |
 | `lab` VM (Multipass, Ubuntu 24.04, `SETUP.md`) | barcha `ip`, `bridge`, `ss`, `tcpdump` kuzatuvlari, `ip netns`, VM ichidagi Docker (1-dars) | buzilsa `multipass restore lab.clean`; interfeys nomi va manzillar har mashinada boshqa, doim o'zingiz aniqlaysiz |
 | Docker konteyner (`nicolaka/netshoot`, `amd64` va `arm64`) | tayyor tarmoq asboblari to'plami: `tcpdump`, `dig`, `nc`, `mtr`, `nmap` | `docker run --rm`, dars oxirida konteyner va tarmoqlar o'chiriladi |
-| Multipass VM `net1`, `net2` (Ubuntu 24.04) | ikki alohida host kerak bo'lgan va holatni o'zgartiradigan ishlar: static route, `nft`, `ufw`, `sshd_config`, WireGuard | modul oxirida `multipass delete net1 net2 && multipass purge` |
+| Multipass VM `net1`, `net2` (Ubuntu 24.04) | ikki alohida host kerak bo'lgan va holatni o'zgartiradigan ishlar (4 va 6-darslar): `nft`, `ufw`, `sshd_config`, WireGuard | modul oxirida `multipass delete net1 net2 && multipass purge` |
 
 VM'ning tarmog'i host'ga qarab farq qiladi: Zorin'da VM interfeysi odatda `ens3`, manzil `10.x.x.x/24`, host tomonda `mpqemubr0`; macOS'da odatda `enp0s1`, `192.168.64.x/24`, host tomonda `bridge100`. Darslar bu qiymatlarga tayanmaydi. macOS'da host'dagi Docker yashirin Linux VM ichida ishlaydi: uning bridge, veth va NAT qoidalari host'da ko'rinmaydi, shuning uchun ularni ko'rish kerak bo'lgan darslarda Docker `lab` VM ichida ishlatiladi.
 
