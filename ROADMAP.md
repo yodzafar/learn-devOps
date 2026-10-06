@@ -84,7 +84,7 @@ Qisqartirilmaydi: `linux` to'liq, `network` 3–6, `docker` 1–4, `cloud` 2–4
 - [ ] Hafta 1–3: linux 1–7. Hozir 1-dars (`linux/docs/01-intro.md` → `linux/01-intro/`)
 - [ ] Hafta 4–7: linux 8–13
 - Batafsil holat: `PROGRESS.md` (indeks) va `linux/docs/PROGRESS.md`
-- Darslar holati: 64 ta dars birinchi variantda (qisqa, faqat Zorin host'iga mo'ljallangan). Ularni `CLAUDE.md` dagi "Batafsillik" va "Ikki mashina" qoidalariga o'tkazish boshlangan: `linux/docs/01-intro.md` yangi formatda (namuna), qolgan 63 dars hali eski formatda. Shundan keyin vaqt hisobi qayta ko'riladi.
+- Darslar holati: 64 darsdan 15 tasi yangi (batafsil, ikki mashinaga mos) formatda: linux 1, 6, 8, 10–13; git 1–2; network 1, 2, 4; cloud 1; iac 1, 3. Qolgan 49 tasi hali birinchi variantda. Hammasi o'tkazilgach vaqt chizig'i qayta hisoblanadi (darslar vaqti taxminan 1.5 baravar oshadi).
 
 ### Temp: reja bilan solishtirish
 

@@ -3,23 +3,36 @@
 Ishlash tartibi: men nazariya va vazifalar beraman, siz scratch repolarda bajarib, buyruq, natija va izohni ish papkasidagi `README.md` ga yozasiz, men tekshiraman.
 Har dars uchun alohida papka: `git/01-commits/`, `git/02-branches-merge/` va hokazo. Yaratish: `make new m=git n=01 name=commits`.
 
+Kim uchun: frontend dasturchi (TS/Node), backend va ops'ni endi o'rganmoqda. Git'ni `add`, `commit`, `push`, PR darajasida har kuni ishlatadi, lekin ichki tuzilishini (obyektlar, ref'lar, index) ko'rmagan. Shuning uchun darslar hech narsani "tanish" deb o'tkazib yubormaydi: har tushuncha noldan, mexanizmi va ishlaydigan misoli bilan beriladi, kundalik buyruqlar esa "ichkarida nima bo'ladi" tomonidan qayta ochiladi.
+
 ## Vaqt hisobi
 
-Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan.
+Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan. Bir hafta 5 o'quv kuni.
 
-| Bosqich | Darslar | Umumiy muddat | Siz uchun | Sabab |
-|---------|---------|---------------|-----------|-------|
-| I - Lokal Git ichki tuzilishi | 2 | 7–8 kun | 5 kun | `add/commit/branch/merge` kundalik ish. Yangi: object model, reflog, `reset` rejimlari, interactive rebase, bisect |
-| II - Hamkorlik va hosting | 2 | 8–9 kun | 6 kun | PR va review tajribasi bor. Yangi: refspec, `--force-with-lease`, signing, hook'lar, hosting administratsiyasi, self-hosted Gitea |
-| **Jami** | **4** | **15–17 kun** | **11 kun (taxminan 2 hafta)** | |
+| Bosqich | Darslar | Siz uchun | Sabab |
+|---------|---------|-----------|-------|
+| I - Lokal Git ichki tuzilishi | 2 | 8 kun | Hammasi noldan: object model, uch qatlam, reflog, `reset` rejimlari, three-way merge, interactive rebase, bisect. Ko'p vazifa grafni qo'lda chizishni talab qiladi |
+| II - Hamkorlik va hosting | 2 | 10 kun | Remote-tracking ref, refspec, `--force-with-lease`, SSH va signing, hook'lar, hosting administratsiyasi, self-hosted Gitea. Ikki mashinada sozlash (kalitlar, `gh`, Docker) vaqt oladi |
+| **Jami** | **4** | **18 kun (3.6 hafta, taxminan 4 hafta)** | |
 
-Darslar bo'yicha (siz uchun): 1-dars 2 kun, 2-dars 3 kun, 3-dars 3 kun, 4-dars 3 kun.
+Darslar bo'yicha (siz uchun): 1-dars 3 kun, 2-dars 5 kun, 3-dars 5 kun, 4-dars 5 kun.
 
 Mavzuni "o'rgandim" deyish mezoni: vazifalar bajarilgan, men tekshirib tasdiqlaganman, va siz mexanizmni (nima uchun shunday ishlashini) o'z so'zingiz bilan tushuntira olasiz. "Buyruqni bilaman" yetarli emas, bu modulning maqsadi buyruq ortidagi modelni ko'rish.
 
 ## Laboratoriya
 
-- **Ish mashinasi** (Zorin OS 18). Git 2.43 va `gh` CLI o'rnatilgan. Tizim holatini o'zgartiradigan vazifa bu modulda yo'q, VM kerak emas.
+Modul ikki mashinada bir xil bajariladi: ofisda Zorin OS 18, uyda macOS (Apple Silicon). Asosiy asboblar va `lab` VM root'dagi `SETUP.md` bo'yicha o'rnatiladi; har darsning "Laboratoriya" bo'limida "Zorin (ofis) / macOS (uy)" jadvali bor.
+
+| | Zorin (ofis) | macOS (uy) |
+|---|--------------|------------|
+| Git | `apt`, 2.43 | Xcode Command Line Tools (Apple Git, odatda eskiroq); yangi versiya kerak bo'lsa `brew install git`. Versiyaga bog'liq joylarda dars `git --version` ni tekshirishni aytadi |
+| `gh` CLI | GitHub'ning rasmiy apt reposi | `brew install gh` |
+| `pre-commit` | `pipx install pre-commit` | `brew install pre-commit` |
+| Docker (4-dars, Gitea) | Docker Engine, `amd64` | Docker Desktop, `arm64` |
+| SSH kalitlar, `~/.ssh/config` | bir xil | bir xil, qo'shimcha Keychain imkoniyati (3-darsda) |
+
+- **Qayerda bajariladi**: Git ishlari ikkala mashinada host'ning o'zida. Tizim holatini o'zgartiradigan vazifa bu modulda yo'q, shuning uchun `lab` VM kerak emas.
+- **Holat ko'chishi**: scratch repolar har mashinada lokal va ko'chmaydi (vazifani qaysi mashinada boshlasangiz, o'sha yerda tugating yoki ikkinchisida qaytadan yarating). GitHub'dagi sinov repolari umumiy. Javoblar kurs reposi orqali `git push` va `git pull` bilan ko'chadi.
 - **Scratch repolar**: `~/git-lab/` ostida, dars bo'yicha (`~/git-lab/01/`, `~/git-lab/02/` ...). Ularni kurs reposi ichida yaratmang: Git ichidagi Git "embedded repository" bo'lib qoladi va tashqi repo uning ichini kuzatmaydi. Kurs reposidagi ish papkasiga faqat `README.md` va so'ralgan fayllar (hook skripti, `compose.yaml`, config nusxasi) tushadi.
 - **Remote'lar**: 3-darsda lokal bare repo (`git init --bare`) ikki "dasturchi" o'rtasidagi server vazifasini bajaradi, PR vazifalari uchun GitHub'dagi shaxsiy akkauntingizda bir martalik repo ochiladi.
 - **Gitea**: 4-darsda Docker Compose bilan `127.0.0.1` da ko'tariladi, dars oxirida `docker compose down -v` bilan o'chiriladi.
@@ -53,7 +66,7 @@ Bu modul keyingi modullar uchun poydevor: CI/CD pipeline'lar push, tag va PR hod
 
 ## Ataylab kiritilmagan
 
-- Git'ning boshlang'ich darajasi (`init`, `add`, `commit`, `push` nima ekani): kundalik tajribangiz bor.
+- Git'ni o'rnatish: `SETUP.md` da. Kundalik buyruqlar (`init`, `add`, `commit`, `push`) esa o'tkazib yuborilmaydi, 1-darsda ichki mexanizmi bilan qayta tushuntiriladi.
 - CI pipeline yozish (GitHub Actions, GitLab CI): alohida CI/CD modulida. Bu yerda faqat hosting sozlamalari va "required check" tushunchasi.
 - Git LFS, submodule, subtree, sparse checkout, partial clone, monorepo asboblari: kerak bo'lganda alohida so'rang.
 - Katta hajmli tarixni tozalash (`git filter-repo`): faqat nima uchun kerakligi va havolasi beriladi.

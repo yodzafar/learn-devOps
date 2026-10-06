@@ -1,32 +1,37 @@
 # Kompyuter tarmoqlari o'quv rejasi (DevOps uchun)
 
+Kim uchun: frontend dasturchi (TS/Node), backend va ops'ni endi o'rganmoqda. Tarmoq bo'yicha boshlang'ich bilim "brauzer HTTP so'rov yuboradi" darajasida deb olinadi: MAC, IP, port, TCP, DNS, routing va firewall noldan, mexanizmi va ishlaydigan misoli bilan tushuntiriladi. Oldindan bilish talab qilinadigan narsa faqat terminalda ishlash (`linux` moduli) va `SETUP.md` bo'yicha tayyor laboratoriya.
+
 Ishlash tartibi: men nazariya va vazifalar beraman, siz buyruqlarni bajarib natija va izohni `README.md` ga yozasiz, men tekshiraman.
 Har dars uchun alohida papka: `network/01-network-types/`, `network/02-osi-model/` va hokazo. Yaratish: `make new m=network n=01 name=network-types`.
 
 ## Vaqt hisobi
 
-Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan.
+Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan. Har darsning muddati o'sha darsning `Taxminiy vaqt` qatorida, bu jadval ularning yig'indisi. Hafta 5 o'quv kuni deb olinadi.
 
-| Bosqich | Darslar | Muddat (2–2.5 soat/kun) | Siz uchun | Sabab |
-|---------|---------|--------------------------|-----------|-------|
-| I - Asos: qurilmalar, qatlamlar, manzillar | 3 | 9–10 kun | 7 kun | HTTP darajasidan pastdagi qatlamlar yangi, lekin terminal va JSON/hex o'qish tajribasi bor. Subnet hisobi qo'lda mashq talab qiladi, qisqartirilmaydi |
-| II - Protokollar | 1 | 6–7 kun | 5 kun | HTTP, TLS, DNS'ning mijoz tomoni tanish. TCP holatlari, SSH sozlash va pochta yozuvlari yangi |
-| III - Paket yo'li: routing, firewall, NAT, VPN | 2 | 9–10 kun | 8 kun | Butunlay yangi soha, namespace va firewall laboratoriyasi vaqt oladi |
-| **Jami** | **6** | **24–27 kun** | **20 kun (4 hafta)** | |
+| Bosqich | Darslar | Dars bo'yicha (kun) | Siz uchun | Sabab |
+|---------|---------|---------------------|-----------|-------|
+| I - Asos: qurilmalar, qatlamlar, manzillar | 3 | 1-dars: 3, 2-dars: 3, 3-dars: 5 | 11 kun | HTTP'dan pastdagi hamma qatlam yangi: frame, MAC, ARP, paket, port. Subnet hisobi qo'lda mashq talab qiladi, qisqartirilmaydi |
+| II - Protokollar | 1 | 4-dars: 8 | 8 kun | Bitta darsda oltita protokol (TCP, UDP, DNS, SSH, SMTP, HTTP/TLS). HTTP'ning brauzer tomoni tanish bo'lsa ham, server va tarmoq tomoni noldan o'tiladi |
+| III - Paket yo'li: routing, firewall, NAT, VPN | 2 | 5-dars: 5, 6-dars: 8 | 13 kun | Butunlay yangi soha, namespace, firewall va ikki VM'li laboratoriya vaqt oladi |
+| **Jami** | **6** | | **32 kun (6 hafta va 2 kun)** | |
 
 Bir darsni "o'rgandim" deyish mezoni: vazifalar bajarilgan, men tekshirib tasdiqlaganman, va siz "paket A dan B ga qanday yetib boradi" savoliga shu dars qatlamida o'z so'zingiz bilan javob bera olasiz.
 
 ## Laboratoriya
 
-Uch muhit ishlatiladi, har dars "Laboratoriya" bo'limida qaysi biri ekanini aytadi:
+Kurs ikki mashinada o'tiladi: ofisda Zorin OS (Linux, `amd64`), uyda macOS (Apple Silicon, `arm64`). Har dars ikkalasida bir xil bajariladi. Asboblarni o'rnatish va `lab` VM'ni yaratish `SETUP.md` da (Multipass: Zorin'da snap, macOS'da Homebrew); darslar ularni qayta o'rnatmaydi. macOS'da `ip`, `ss`, `bridge`, `nft` yo'q, Zorin'da esa host tarmog'ini buzish xavfi bor, shuning uchun Linux tarmoq buyruqlari host'da emas, VM yoki konteynerda bajariladi. Har dars "Laboratoriya" bo'limida qaysi muhit ekanini va "Zorin (ofis) / macOS (uy)" farqlarini aytadi.
 
 | Muhit | Nima uchun | Qoidasi |
 |-------|-----------|---------|
-| Ish mashinasi (Zorin OS 18) | faqat o'qiydigan buyruqlar: `ip addr`, `ip route`, `ss`, `dig`, `curl -v`, `mtr` | hech narsa o'zgartirilmaydi: interfeys, route, firewall, sysctl'ga tegilmaydi |
-| Docker konteyner (`nicolaka/netshoot`) | tayyor tarmoq asboblari to'plami: `tcpdump`, `dig`, `nc`, `mtr`, `nmap` | `docker run --rm`, dars oxirida konteyner va tarmoqlar o'chiriladi |
-| Multipass VM (Ubuntu 24.04) | holatni o'zgartiradigan hamma narsa: `ip netns`, static route, `nft`, `ufw`, `sshd_config`, WireGuard | VM linux modulida o'rnatilgan Multipass bilan yaratiladi, dars oxirida `multipass delete --purge` |
+| Host (Zorin yoki macOS) | `make`, `git`, `multipass`, `docker` buyruqlari; ixtiyoriy kuzatuv (Zorin: `ip -br addr`, macOS: `ifconfig`, `arp -a`, `netstat -rn`, `networksetup`) | hech narsa o'zgartirilmaydi: interfeys, route, firewall, sysctl'ga tegilmaydi |
+| `lab` VM (Multipass, Ubuntu 24.04, `SETUP.md`) | barcha `ip`, `bridge`, `ss`, `tcpdump` kuzatuvlari, `ip netns`, VM ichidagi Docker (1-dars) | buzilsa `multipass restore lab.clean`; interfeys nomi va manzillar har mashinada boshqa, doim o'zingiz aniqlaysiz |
+| Docker konteyner (`nicolaka/netshoot`, `amd64` va `arm64`) | tayyor tarmoq asboblari to'plami: `tcpdump`, `dig`, `nc`, `mtr`, `nmap` | `docker run --rm`, dars oxirida konteyner va tarmoqlar o'chiriladi |
+| Multipass VM `net1`, `net2` (Ubuntu 24.04) | ikki alohida host kerak bo'lgan va holatni o'zgartiradigan ishlar: static route, `nft`, `ufw`, `sshd_config`, WireGuard | modul oxirida `multipass delete net1 net2 && multipass purge` |
 
-Multipass o'rnatilmagan bo'lsa: `sudo snap install multipass` (https://documentation.ubuntu.com/multipass/). Modul uchun ikkita VM yetadi:
+VM'ning tarmog'i host'ga qarab farq qiladi: Zorin'da VM interfeysi odatda `ens3`, manzil `10.x.x.x/24`, host tomonda `mpqemubr0`; macOS'da odatda `enp0s1`, `192.168.64.x/24`, host tomonda `bridge100`. Darslar bu qiymatlarga tayanmaydi. macOS'da host'dagi Docker yashirin Linux VM ichida ishlaydi: uning bridge, veth va NAT qoidalari host'da ko'rinmaydi, shuning uchun ularni ko'rish kerak bo'lgan darslarda Docker `lab` VM ichida ishlatiladi.
+
+Qo'shimcha ikki VM kerak bo'lgan darsda (ikkala mashinada bir xil) shunday yaratiladi:
 
 ```
 multipass launch 24.04 --name net1 --cpus 1 --memory 1G --disk 5G
@@ -35,7 +40,7 @@ multipass list
 multipass shell net1
 ```
 
-Network namespace (`ip netns`) bitta VM ichida bir nechta "virtual host" va router yaratish imkonini beradi, shuning uchun 5-darsdagi routing laboratoriyasi bitta VM'da bajariladi. Ikki VM faqat SSH (4-dars) va WireGuard (6-dars) uchun kerak.
+Network namespace (`ip netns`) bitta VM ichida bir nechta "virtual host" va router yaratish imkonini beradi, shuning uchun 5-darsdagi routing laboratoriyasi bitta VM'da bajariladi. Ikki VM faqat SSH (4-dars) va WireGuard (6-dars) uchun kerak. Laboratoriya holati mashinalar orasida ko'chmaydi: ikkinchi mashinada VM'lar qaytadan yaratiladi, javoblar git orqali ko'chadi. Wireshark ixtiyoriy (Zorin: `sudo apt install wireshark`, macOS: `brew install --cask wireshark`), asosiy yo'l `tcpdump`.
 
 ## I bosqich - Asos
 1. **Tarmoq turlari**: LAN, WAN, internet tuzilishi (ISP, IXP), NIC, switch, router, access point, MAC manzil, Ethernet frame, MTU, Linux interfeyslari (`ip link`, `ip addr`), ARP va `ip neigh`, Docker bridge va veth

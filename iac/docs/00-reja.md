@@ -7,14 +7,23 @@ Bu modul `linux`, `git`, `network`, `docker`, `cloud` va `cicd` modullaridan key
 
 ## Vaqt hisobi
 
-Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan.
+Kim uchun: frontend dasturchi (TS/Node), backend va ops'ni endi o'rganmoqda. Darslar hech narsani oldindan ma'lum deb hisoblamaydi: idempotency, state, inventory, modul, handler, Jinja2, role va Vault noldan tushuntiriladi. Haqiqiy ko'prik bo'lgan joylarda frontend tajribasiga bog'lanadi (React reconciliation va declarative model, lockfile va state).
 
-| Bosqich | Darslar | Muddat (2–2.5 soat/kun) | Siz uchun | Sabab |
-|---------|---------|--------------------------|-----------|-------|
-| I - Tushunchalar | 1 | 3 kun | 2 kun | Deklarativ fikrlash React va `package.json` dan tanish; idempotent bash yozish yangi |
-| II - Ansible | 2 | 9–10 kun | 8 kun | YAML va template'lar tanish; SSH, privilege escalation, handler va precedence yangi |
-| III - Terraform | 2 | 11–12 kun | 10 kun | Sintaksis tez o'zlashadi; state, drift va import amaliyotini qisqartirib bo'lmaydi |
-| **Jami** | **5** | **4.5–5 hafta** | **4 hafta** | |
+Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan. Har dars muddati shu darsning `Taxminiy vaqt` qatoridan olingan.
+
+| Bosqich | Dars | Siz uchun |
+|---------|------|-----------|
+| I - Tushunchalar | 1. Umumiy ma'lumot | 3 kun |
+| **I jami** | | **3 kun** |
+| II - Ansible | 2. Ansible asoslari | 6 kun |
+| II - Ansible | 3. Ansible role'lar | 6 kun |
+| **II jami** | | **12 kun** |
+| III - Terraform | 4. Terraform asoslari | 8 kun |
+| III - Terraform | 5. State va modullar | 8 kun |
+| **III jami** | | **16 kun** |
+| **Modul jami** | **5 dars** | **31 kun, haftasiga 5 o'quv kuni bilan 6 hafta va 1 kun** |
+
+Qayerga vaqt ketadi: I bosqichda idempotent bash yozish va cloud-init; II bosqichda SSH, privilege escalation, handler, o'zgaruvchi precedence va Vault; III bosqichda state, drift va import amaliyoti, ularni qisqartirib bo'lmaydi.
 
 Muhim izohlar:
 - Terraform AWS vazifalari pul sarflashi mumkin. Har mashg'ulot `terraform destroy` va o'chirilganini tekshirish bilan tugaydi. Resurs yoqilgan holda kunni tugatmang.
@@ -23,12 +32,20 @@ Muhim izohlar:
 
 ## Laboratoriya
 
-| Muhit | Nima uchun | Narx |
-|-------|------------|------|
-| Ish mashinasi (Zorin OS 18) | control node: `ansible`, `terraform` (yoki `tofu`) CLI shu yerda o'rnatiladi va ishlaydi | bepul |
-| Multipass VM'lar (Ubuntu 24.04) | Ansible nishonlari, bash va cloud-init tajribalari. Tizimni o'zgartiradigan hamma narsa shu yerda | bepul |
-| Lokal Docker | Terraform asoslari Docker provider bilan: state, plan, drift, `count`/`for_each` pulsiz o'rganiladi | bepul |
-| AWS akkaunt | Terraform AWS vazifalari: VPC, subnet, security group, EC2, S3, remote state | pullik bo'lishi mumkin |
+Kurs ikki mashinada o'tiladi: ofisda Zorin OS 18 (`amd64`), uyda macOS (Apple Silicon, `arm64`). Multipass, Docker va `lab` VM ildizdagi `SETUP.md` bo'yicha har mashinada bir marta o'rnatiladi; bu modul darslari ularni qayta o'rnatmaydi, faqat o'ziga kerakli qo'shimcha VM'larni nomi bilan yaratadi.
+
+| Muhit | Nima uchun | Zorin (ofis) | macOS (uy) | Narx |
+|-------|------------|--------------|------------|------|
+| Host (control node) | `ansible`, `terraform` (yoki `tofu`) CLI shu yerda ishlaydi, fayllar shu yerda yoziladi | Ansible `pipx` bilan, Terraform rasmiy apt repo'dan (o'rnatish birinchi kerak bo'lgan darsda) | Ansible `brew install ansible` yoki `pipx`, Terraform Homebrew orqali | bepul |
+| Multipass VM'lar (Ubuntu 24.04) | Ansible nishonlari, bash va cloud-init tajribalari. Tizimni o'zgartiradigan hamma narsa shu yerda | VM'lar `x86_64` | VM'lar `aarch64` | bepul |
+| Lokal Docker | Terraform asoslari Docker provider bilan: state, plan, drift, `count`/`for_each` pulsiz o'rganiladi | Docker Engine, to'g'ridan-to'g'ri host kernel'ida | Docker yashirin Linux VM ichida, image'lar `arm64` | bepul |
+| AWS akkaunt | Terraform AWS vazifalari: VPC, subnet, security group, EC2, S3, remote state | CLI kalitlari har mashinada alohida | CLI kalitlari har mashinada alohida | pullik bo'lishi mumkin |
+
+Ikki mashina qoidalari (har dars "Laboratoriya" bo'limida aniq yo'l beriladi):
+- VM IP manzillari har mashinada va har qayta yaratishda boshqa. Commit qilinadigan inventory fayllarida IP yozilmaydi: manzillar git-ignore qilingan lokal faylda turadi yoki `multipass` chiqishidan generatsiya qilinadi, repoda faqat namuna (`*.example`) bo'ladi.
+- SSH kalitlari, Vault parol fayli, `terraform.tfstate` va AWS kalitlari git orqali ko'chmaydi, ikkinchi mashinada qayta yaratiladi. Shifrlangan `vault.yml`, playbook, role va `.tf` fayllar git orqali ko'chadi.
+- Nishon arxitekturasi farq qiladi (`amd64` va `arm64`): binary yuklaydigan yoki apt repo qo'shadigan har qanday task arxitekturani qattiq yozmaydi, uni nishondan aniqlaydi.
+- Laboratoriya holati (VM, konteyner, cloud resurs) mashinalar orasida ko'chmaydi. Bu modulda bu kamchilik emas, mashq: muhit koddan bitta buyruq bilan qayta tiklanishi kerak.
 
 AWS qoidalari (cloud modulidagi bilan bir xil):
 - Budget alert yoqilgan bo'lsin, AWS vazifasini boshlashdan oldin tekshiring.

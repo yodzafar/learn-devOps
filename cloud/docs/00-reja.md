@@ -5,17 +5,21 @@ Har dars uchun alohida papka: `cloud/01-providers/`, `cloud/02-first-setup/` va 
 
 Bu modulga kelguncha linux, git, network va docker modullari tugagan deb hisoblanadi. Bu yerda server sozlash va deploy ataylab qo'lda qilinadi: CI/CD va Terraform keyingi modullarda keladi, ular avtomatlashtiradigan qadamlarni avval qo'lda bir marta bosib o'tish kerak.
 
+Kim uchun yozilgan: frontend dasturchi (TS/Node), backend va ops'ni endi o'rganmoqda. Cloud bilan tajriba ko'pi bilan Vercel yoki Netlify'ga frontend deploy qilish darajasida deb olinadi. Server, IAM, VPC, security group, object storage, reverse proxy va TLS sozlash yangi mavzu hisoblanadi va har darsda noldan tushuntiriladi: har atama birinchi uchraganda ta'riflanadi, har bo'limda mexanizm, ishlaydigan misol va uning chiqishi bor. PaaS tajribasiga bog'lash haqiqiy bo'lgan joyda beriladi: PaaS aynan shu modulda qo'lda qilinadigan VM, tarmoq va TLS ishlarini yashiradi.
+
 ## Vaqt hisobi
 
-Hisob kuniga 2–2.5 soat muntazam mashg'ulot sharti bilan.
+Hisob kuniga 2–2.5 soat muntazam mashg'ulot sharti bilan. Darslar batafsil formatda (har biri 600–1100 qator), shuning uchun har darsning muddati birinchi variantdagi "siz uchun" muddatning 1.5 baravari, yuqoriga yaxlitlangan.
 
-| Bosqich | Darslar | Muddat (2–2.5 soat/kun) | Siz uchun | Sabab |
-|---------|---------|--------------------------|-----------|-------|
-| I - Tushunchalar | 1 | 3 kun | 2 kun | SaaS/PaaS iste'molchi sifatida tanish (Vercel, Netlify, GitHub); yangi qism: regionlar, shared responsibility, narx modellari |
-| II - Akkaunt va xavfsizlik | 1 | 3 kun | 2 kun | CLI va JSON bilan ishlash tanish; IAM modeli yangi, qisqartirilmaydi |
-| III - Asosiy resurslar | 1 | 5 kun | 4 kun | Linux va network modullari asos beradi; VPC, security group, S3 policy yangi |
-| IV - Deployment | 1 | 6 kun | 5 kun | Docker va compose tanish; TLS, DNS, hardening, backup va runbook yangi |
-| **Jami** | **4** | **17 kun (3.5 hafta)** | **13 kun (2.5–3 hafta)** | |
+| Bosqich | Dars | Avvalgi muddat | Yangi muddat (siz uchun) | Asosiy yangi mavzular |
+|---------|------|----------------|--------------------------|-----------------------|
+| I - Tushunchalar | 1 | 2 kun | 3 kun | xizmat modellari, region va AZ, shared responsibility, narx modellari; PaaS nimani yashirishi |
+| II - Akkaunt va xavfsizlik | 2 | 2 kun | 3 kun | root va IAM, policy baholanishi, role va vaqtinchalik credential, budget alert, AWS CLI v2 ikki mashinada |
+| III - Asosiy resurslar | 3 | 4 kun | 6 kun | EC2, VPC, subnet, security group, S3 policy, tozalash tartibi |
+| IV - Deployment | 4 | 5 kun | 8 kun | image arxitekturasi, reverse proxy, DNS, TLS, secret, backup, hardening, runbook |
+| **Jami** | **4 dars** | **13 kun** | **20 kun (4 hafta, haftasiga 5 o'quv kuni)** | |
+
+Bosqichlar bo'yicha: I 3 kun, II 3 kun, III 6 kun, IV 8 kun.
 
 Bir darsni "o'rgandim" deyish mezoni: vazifalar bajarilgan, men tekshirib tasdiqlaganman, resurslar o'chirilgan va siz mavzuni o'z so'zingiz bilan tushuntira olasiz.
 
@@ -23,7 +27,11 @@ Bir darsni "o'rgandim" deyish mezoni: vazifalar bajarilgan, men tekshirib tasdiq
 
 - **Asosiy provayder: AWS.** Amaliyot AWS'da, lekin har darsda GCP, Azure, DigitalOcean va Hetzner ekvivalentlari jadvali bor, ko'nikma provayderga bog'lanib qolmasligi kerak.
 - **Akkaunt**: shaxsiy AWS akkaunt (2-darsda ochiladi). Bank kartasi talab qilinadi. Free tier va kredit shartlari o'zgarib turadi, aniq raqamlarni dars emas, rasmiy sahifa aytadi: https://aws.amazon.com/free/ va https://aws.amazon.com/pricing/.
-- **Ish mashinasi**: AWS CLI v2 (2-darsda foydalanuvchi darajasida, `sudo` siz o'rnatiladi), Docker (o'rnatilgan), `ssh`, `dig`, `curl`.
+- **Ikki mashina**: kurs ofisda Zorin OS (`amd64`), uyda macOS (Apple Silicon, `arm64`) da o'tiladi. Umumiy tayyorgarlik (repo, Docker, Multipass'dagi `lab` VM) ildizdagi `SETUP.md` da, bu modul uni qayta tushuntirmaydi. Har darsning "Laboratoriya" bo'limida "Zorin (ofis) / macOS (uy)" jadvali bor.
+- **Host asboblari**: AWS CLI v2, Docker, `ssh`, `dig`, `curl`. AWS CLI v2 2-darsda ikki shaklda o'rnatiladi: Zorin'da rasmiy `x86_64` zip arxivi foydalanuvchi darajasida (`sudo` siz), macOS'da rasmiy `.pkg` yoki `brew install awscli`. Host'da yo'q Linux buyrug'i kerak bo'lsa `lab` VM ishlatiladi.
+- **Akkaunt umumiy, credential'lar mashinaga xos**: AWS akkaunt bitta, lekin CLI profili va SSH private key har mashinada alohida sozlanadi va hech qachon git orqali ko'chirilmaydi. Laboratoriya holati emas, faqat javoblar (`README.md`, skriptlar) git orqali ko'chadi; cloud'dagi resurslar ikkala mashinadan bir xil ko'rinadi.
+- **Skriptlar**: `leftovers.sh` kabi yordamchi skriptlar ikkala mashinada ishlaydigan portable bash bo'ladi (macOS'da bash 3.2 va BSD utilitalar: `grep -P`, GNU `date -d`, suffikssiz `sed -i` ishlatilmaydi), yoki dars ularni `lab` VM ichida ishlatishni aytadi.
+- **Image arxitekturasi**: Mac'da yig'ilgan image `linux/arm64` bo'ladi va `amd64` EC2 instansda ishlamaydi. 4-dars uch yechimni o'rgatadi: `docker build --platform linux/amd64`, `arm64` (Graviton) instans tipi, yoki serverning o'zida build.
 - **Server ichidagi o'zgarishlar** (paket, user, firewall, systemd) faqat EC2 instansda bajariladi, ish mashinasida emas.
 
 Har resurs yaratiladigan darsda majburiy tartib:
