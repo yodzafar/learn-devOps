@@ -1,30 +1,41 @@
 # Konteynerlash moduli rejasi (Docker, Compose, orkestratsiyaga kirish)
 
+Kim uchun: frontend dasturchi (TS/Node), backend va ops'ni endi o'rganmoqda. `docker run` yoki tayyor `Dockerfile` ni ishlatgan bo'lishi mumkin, lekin konteyner ichida aslida nima borligi (namespace, cgroup, layer, bridge, NAT) yangi mavzu deb olinadi va har darsda noldan, mexanizmi va ishlaydigan misoli bilan tushuntiriladi. `linux` va `network` modullari oldindan o'tilgan bo'lishi kerak.
+
 Ishlash tartibi: men nazariya va vazifalar beraman, siz buyruqlarni ishlatib, `Dockerfile` va `compose.yaml` fayllarni o'zingiz yozasiz, men tekshirib xatolar, xavfsizlik va idiomalarni ko'rsataman.
 Har dars uchun alohida papka: `docker/01-containers/`, `docker/02-images/` va hokazo. Yaratish: `make new m=docker n=01 name=containers`.
 
 ## Vaqt hisobi
 
-Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan.
+Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan. Har darsning muddati o'sha darsning `Taxminiy vaqt` qatorida, bu jadval ularning yig'indisi. Hafta 5 o'quv kuni deb olinadi.
 
-| Bosqich | Darslar | Muddat (2–2.5 soat/kun) | Siz uchun | Sabab |
-|---------|---------|--------------------------|-----------|-------|
-| I - Konteyner va image | 2 | 9–10 kun | 7 kun | `docker run` va tayyor `Dockerfile` dan nusxa olish tanish. Yangi: namespaces, cgroups, signal va PID 1, layer cache mexanizmi, multi-stage, non-root |
-| II - Ma'lumot, tarmoq, Compose | 2 | 7–8 kun | 6 kun | Compose'ni frontend loyihalarda ishlatgansiz. Yangi: volume hayot sikli, UID muammolari, bridge DNS, NAT, healthcheck bilan `depends_on` |
-| III - Orkestratsiyaga kirish | 1 | 5 kun | 4–5 kun | Butunlay yangi soha, qisqartirilmaydi. Mini-loyiha shu yerda |
-| **Jami** | **5** | **3–3.5 hafta** | **2.5–3 hafta** | |
+| Bosqich | Darslar | Dars bo'yicha (kun) | Siz uchun | Sabab |
+|---------|---------|---------------------|-----------|-------|
+| I - Konteyner va image | 2 | 1-dars: 4, 2-dars: 6 | 10 kun | Namespaces, cgroups, signal va PID 1, layer va cache mexanizmi, multi-stage, non-root, arxitektura (`amd64` va `arm64`) va multi-platform build |
+| II - Ma'lumot, tarmoq, Compose | 2 | 3-dars: 5, 4-dars: 5 | 10 kun | Volume hayot sikli, UID muammolari, bridge DNS, NAT, healthcheck, Compose modeli va `depends_on`. 3-darsda vazifalarning bir qismi `lab` VM ichidagi Docker'da |
+| III - Orkestratsiyaga kirish | 1 | 5-dars: 7 | 7 kun | Butunlay yangi soha, qisqartirilmaydi. Mini-loyiha shu yerda |
+| **Jami** | **5** | | **27 kun (5 hafta va 2 kun)** | |
 
 Bir darsni "o'rgandim" deyish mezoni: vazifalar bajarilgan, men tekshirib tasdiqlaganman, yaratilgan resurslar tozalangan va siz mexanizmni o'z so'zingiz bilan tushuntira olasiz.
 
 ## Laboratoriya
 
-- Barcha vazifalar ish mashinasidagi Docker Engine'da bajariladi. Reja yozilgan paytdagi versiyalar: Docker Engine 29.8, containerd 2.3, runc 1.5, Compose v5.5, buildx 0.37, cgroup v2, containerd image store (`docker info` da `Storage Driver: overlayfs`, `driver-type: io.containerd.snapshotter.v1`). O'zingizda `docker version` va `docker info` bilan tekshiring.
-- Siz `docker` guruhidasiz, shuning uchun `sudo` kerak emas. Esda tuting: `docker` guruhi a'zoligi amalda root huquqiga teng (1-dars, 2-bo'lim).
-- Konteyner ichida paket o'rnatish, user yaratish, fayl tizimini buzish mumkin, bu ish mashinasiga ta'sir qilmaydi. Ish mashinasining o'zida paket o'rnatilmaydi. Istisnolar: `kind` va `kubectl` binary'lari (5-dars, `~/.local/bin` ga, `sudo` siz).
-- 5-darsda `docker swarm init` ish mashinasidagi Docker'ni vaqtincha Swarm rejimiga o'tkazadi. Dars oxirida `docker swarm leave --force` bilan qaytariladi.
-- Registry: Docker Hub yoki GitHub Container Registry (GHCR) akkaunti kerak bo'ladi (2-dars). Token `.env` yoki shell history'ga emas, `docker login --password-stdin` orqali beriladi va hech qachon commit qilinmaydi.
-- Har dars oxirida tozalash majburiy: konteynerlar, image'lar, volume'lar, network'lar. Tekshirish: `docker ps -a`, `docker volume ls`, `docker network ls`, `docker system df`.
-- Mashinada boshqa loyihalarning konteyner va volume'lari bor. Dars resurslari prefiks yoki label bilan nomlanadi (`lesson=01`, `lesson02/`, `l3-`, `l4-`, `l5-`) va faqat shular o'chiriladi. `docker system prune`, `docker volume prune -a`, `docker rm -f $(docker ps -aq)` bu modulda ishlatilmaydi.
+Kurs ikki mashinada o'tiladi: ofisda Zorin OS 18 (`amd64`), uyda macOS (Apple Silicon, `arm64`). Docker ikkalasida `SETUP.md` bo'yicha o'rnatilgan. Har darsning "Laboratoriya" bo'limida "Zorin (ofis) / macOS (uy)" jadvali bor.
+
+| Muhit | Zorin (ofis) | macOS (uy) | Nima uchun |
+|-------|--------------|------------|------------|
+| Host'dagi Docker | Docker Engine, to'g'ridan-to'g'ri host kernel'ida, image'lar `amd64` | Docker Desktop, engine yashirin Linux VM ichida, image'lar `arm64` | oddiy `docker` ishlari: `run`, `build`, `logs`, `exec`, `localhost` dagi published portlar, Compose, Swarm, `kind` |
+| `lab` VM ichidagi Docker (`docker.io`, network modulining 1-darsida o'rnatilgan) | bir xil | bir xil | engine'ning host tomonini ko'rish kerak bo'lgan vazifalar: host'dagi `ps`, `/proc/<pid>/ns`, cgroup fayllari, `/var/lib/docker`, `docker0` va veth, konteyner IP'lari, iptables qoidalari. macOS'da bular host'da ko'rinmaydi, shuning uchun ikkala mashinada VM ishlatiladi (1, 2 va 3-darslar). VM kichik: 2 CPU, 2G, 10G |
+
+- Versiyalar har mashinada boshqa, darslar ularga tayanmaydi: `docker version`, `docker info`, `docker compose version` bilan o'zingizda tekshiring. Image store turi ham farq qilishi mumkin (`docker info` dagi `Storage Driver`), 2-dars buni tekshirishni o'rgatadi.
+- Host'da ham, VM'dagi `ubuntu` foydalanuvchisi ham `docker` guruhida, `sudo` kerak emas. Esda tuting: `docker` guruhi a'zoligi amalda root huquqiga teng (1-dars, 2-bo'lim).
+- Arxitektura: Mac'da yig'ilgan image `linux/arm64`, Zorin'da `linux/amd64`. Bir arxitekturali image ikkinchi mashinada `exec format error` beradi yoki emulyatsiyada ishlaydi. 2-dars multi-platform build'ni o'rgatadi, keyingi darslar shunga tayanadi.
+- Konteyner ichida paket o'rnatish, user yaratish, fayl tizimini buzish mumkin, bu host'ga ta'sir qilmaydi. Host'ning o'zida tizim holati o'zgartirilmaydi. Istisnolar foydalanuvchi darajasidagi asboblar: `hadolint` (2-dars), `kind` va `kubectl` (5-dars). Zorin'da `~/.local/bin` ga `sudo` siz, macOS'da Homebrew orqali.
+- 5-darsda `docker swarm init` host'dagi Docker'ni vaqtincha Swarm rejimiga o'tkazadi. Har mashg'ulot oxirida `docker swarm leave --force` bilan qaytariladi: holat mashinalar orasida ko'chmaydi.
+- Registry: Docker Hub yoki GitHub Container Registry (GHCR) akkaunti kerak bo'ladi (2-dars). Token `.env` yoki shell history'ga emas, `docker login --password-stdin` orqali beriladi, har mashinada alohida saqlanadi va hech qachon commit qilinmaydi.
+- Laboratoriya holati (konteyner, image, volume) mashinalar orasida ko'chmaydi, javoblar va fayllar (`Dockerfile`, `compose.yaml`, skriptlar) git orqali ko'chadi.
+- Har dars oxirida tozalash majburiy: konteynerlar, image'lar, volume'lar, network'lar, host'da ham, `lab` VM'da ham. Tekshirish: `docker ps -a`, `docker volume ls`, `docker network ls`, `docker system df`.
+- Ikkala mashinada boshqa loyihalarning konteyner va volume'lari bor. Dars resurslari prefiks yoki label bilan nomlanadi (`lesson=01`, `l02-`, `l3-`, `l4-`, `l5-`) va faqat shular o'chiriladi. `docker system prune`, `docker volume prune -a`, `docker rm -f $(docker ps -aq)` bu modulda ishlatilmaydi.
 
 ## I bosqich - Konteyner va image
 
@@ -57,7 +68,7 @@ Moduldan keyin siz:
 - CI/CD ichida image build va push (GitHub Actions, cache export): CI/CD modulida.
 - Podman, rootless Docker, user namespace remapping, gVisor va Kata Containers: faqat tilga olinadi.
 - O'z registry'ingizni ko'tarish (Harbor), image signing (cosign), SBOM siyosati: xavfsizlik mavzulari bilan birga keyinroq.
-- Docker Desktop va uning kengaytmalari: sizda Linux'da Docker Engine bor, Desktop kerak emas.
+- Docker Desktop'ning grafik interfeysi va kengaytmalari: uyda macOS'da Docker Desktop engine sifatida ishlatiladi, lekin hamma ish ikkala mashinada bir xil ishlaydigan `docker` CLI orqali bajariladi.
 - Windows konteynerlari.
 
 ## Manbalar

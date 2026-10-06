@@ -1,5 +1,7 @@
 # CI/CD o'quv rejasi (pipeline'dan avtomatik deploy'gacha)
 
+Kim uchun: frontend dasturchi (TS/Node), backend va ops'ni endi o'rganmoqda. PR'larda CI tekshiruvlarini (lint, test, preview deploy) ko'rgan, lekin pipeline'ning egasi bo'lmagan deb olinadi: runner, artifact, secret, environment, deploy strategiyasi va OIDC noldan, mexanizmi va ishlaydigan misoli bilan tushuntiriladi. `git`, `docker` va `cloud` modullari oldindan o'tilgan bo'lishi kerak.
+
 Ishlash tartibi: men nazariya va vazifalar beraman, siz pipeline yozasiz va ishga tushirasiz, men `README.md`, pipeline fayllari va run natijalarini tekshirib xato va xavfsizlik muammolarini ko'rsataman.
 Har dars uchun alohida papka: `cicd/01-intro/`, `cicd/02-github-actions/` va hokazo. Yaratish: `make new m=cicd n=01 name=intro`.
 
@@ -7,27 +9,34 @@ Kurs yo'l xaritasidagi mavzular: "CI/CD haqida ma'lumot" (1-dars), "Tools: Githu
 
 ## Vaqt hisobi
 
-Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan.
+Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan. Har darsning muddati o'sha darsning `Taxminiy vaqt` qatorida, bu jadval ularning yig'indisi. Hafta 5 o'quv kuni deb olinadi.
 
-| Bosqich | Darslar | Muddat (2–2.5 soat/kun) | Siz uchun | Sabab |
-|---------|---------|--------------------------|-----------|-------|
-| I - Tushunchalar | 1 | 3 kun | 2 kun | CI bilan frontend'da ishlagansiz (lint, test, build), atamalar tanish. Yangi: artifact promotion, DORA, pipeline'ni lokal modellashtirish |
-| II - Asboblar | 3 | 14–15 kun | 11 kun | YAML va GitHub oqimi tanish, shuning uchun GitHub Actions tez ketadi. Runner/agent, executor, Jenkins ekspluatatsiyasi yangi, qisqartirilmaydi |
-| III - Avtomatik deploy | 1 | 6 kun | 5 kun | SSH, Docker, cloud VM oldingi modullardan tanish. Deploy strategiyalari, rollback va OIDC yangi |
-| **Jami** | **5** | **23–24 kun** | **18 kun (taxminan 3.5–4 hafta)** | |
-
-Dars bo'yicha taqsimot (siz uchun): 1-dars 2 kun, 2-dars 4 kun, 3-dars 3 kun, 4-dars 4 kun, 5-dars 5 kun.
+| Bosqich | Darslar | Dars bo'yicha (kun) | Siz uchun | Sabab |
+|---------|---------|---------------------|-----------|-------|
+| I - Tushunchalar | 1 | 1-dars: 3 | 3 kun | CI, delivery va deployment farqi, pipeline anatomiyasi, artifact promotion, secret'lar, DORA, pipeline'ni lokal modellashtirish |
+| II - Asboblar | 3 | 2-dars: 6, 3-dars: 5, 4-dars: 6 | 17 kun | Workflow va runner mexanizmi, xavfsizlik (pin, permissions, fork), GitLab runner, Jenkins ekspluatatsiyasi. 4-dars vaqt yetmasa birinchi qisqaradi (`ROADMAP.md`) |
+| III - Avtomatik deploy | 1 | 5-dars: 7 | 7 kun | Pipeline'dan SSH, immutable tag, health check, deploy strategiyalari, rollback, OIDC. Cloud VM qayta ko'tariladi |
+| **Jami** | **5** | | **27 kun (5 hafta va 2 kun)** | |
 
 Bir mavzuni "o'rgandim" deyish mezoni: vazifalar bajarilgan, pipeline yashil va ataylab buzilganda qizil bo'ladi, men tekshirib tasdiqlaganman, va siz har qadam nima uchun kerakligini o'z so'zingiz bilan tushuntira olasiz.
 
 ## Laboratoriya
 
-- **Demo repozitoriy**: GitHub'da alohida public repo `cicd-demo` (2-darsda yaratiladi). Pipeline fayllari repo ildizida turishi shart (`.github/workflows/`, `.gitlab-ci.yml`, `Jenkinsfile`), shu sababli ular bu o'quv repozitoriysi ichida ishlamaydi. Ish papkasidagi `README.md` ga javoblar, run havolalari va pipeline fayllarining nusxasi yoziladi.
-- **GitHub**: akkaunt va `gh` CLI (ish mashinasida o'rnatilgan). Public repo'da standart hosted runner'lar bepul.
-- **GitLab**: gitlab.com akkaunt, free tier. `cicd-demo` ga ikkinchi remote sifatida ulanadi. Self-managed GitLab faqat eslatib o'tiladi, o'rnatilmaydi (resurs talabi katta).
-- **Jenkins va TeamCity**: ish mashinasida Docker konteynerlarida, named volume bilan. Ish mashinasiga paket o'rnatilmaydi. Dars oxirida konteyner, volume va network o'chiriladi.
-- **Deploy nishoni**: cloud modulidagi AWS VM (Docker va Compose o'rnatilgan). 5-darsda qayta ko'tariladi, dars oxirida o'chiriladi. Budget alert yoqilgan bo'lishi shart.
-- **Secret'lar**: token, SSH private key, `.env` hech qachon commit qilinmaydi. Ular faqat CI tizimining secret omborida turadi.
+Kurs ikki mashinada o'tiladi: ofisda Zorin OS 18 (`amd64`), uyda macOS (Apple Silicon, `arm64`). Pipeline'lar CI servislarida ishlaydi, shuning uchun natija qaysi mashinadan push qilinganiga bog'liq emas; mashinaga xos narsalar faqat lokal: klon, `gh` va registry login'lari, SSH kalitlar, self-hosted runner'lar va lokal CI serverlar. Har darsning "Laboratoriya" bo'limida "Zorin (ofis) / macOS (uy)" jadvali bor.
+
+| Narsa | Umumiy yoki mashinaga xos | Izoh |
+|-------|---------------------------|------|
+| `cicd-demo` repo (GitHub, public), uning secret, environment va run'lari | umumiy | 2-darsda yaratiladi. Pipeline fayllari repo ildizida turishi shart (`.github/workflows/`, `.gitlab-ci.yml`, `Jenkinsfile`), shu sababli ular bu o'quv repozitoriysi ichida ishlamaydi. Ish papkasidagi `README.md` ga javoblar, run havolalari va pipeline fayllarining nusxasi yoziladi |
+| gitlab.com loyihasi (free tier), uning variable va pipeline'lari | umumiy | `cicd-demo` ga ikkinchi remote sifatida ulanadi. Self-managed GitLab o'rnatilmaydi (resurs talabi katta) |
+| Lokal klon, ikkinchi remote, `gh auth login`, SSH kalit | mashinaga xos | har mashinada alohida sozlanadi; `gh` git modulining 4-darsida o'rnatilgan (Zorin: rasmiy apt repo, macOS: `brew install gh`) |
+| Self-hosted runner'lar (GitHub, GitLab) | mashinaga xos | faqat Docker konteynerida, faqat o'z repongiz uchun. Ofisda ko'tarilgan runner uyda offline, unga mo'ljallangan job navbatda qoladi. macOS'da runner va u yig'gan image'lar `arm64`, Zorin'da `amd64` |
+| Jenkins va TeamCity | mashinaga xos | host'dagi Docker konteynerlarida, named volume bilan, portlar `127.0.0.1` ga bog'langan. Holat mashinalar orasida ko'chmaydi: har asbob vazifalarini bitta mashinada tugating yoki fayllardan qayta quring. Host'ga paket o'rnatilmaydi |
+| Deploy nishoni: cloud modulidagi AWS VM | umumiy | 5-darsda qayta ko'tariladi, dars oxirida o'chiriladi. Budget alert yoqilgan bo'lishi shart. AWS CLI profili va shaxsiy SSH kalit har mashinada alohida |
+
+- **Arxitektura**: GitHub va GitLab hosted runner'lari `x86_64`, ular yig'gan image `linux/amd64`. Mac'da bunday image emulyatsiyada ishlaydi; kerak bo'lsa pipeline multi-platform image yig'adi (docker moduli, 2-dars). Deploy nishoni arxitekturasi image'ga mos bo'lishi kerak.
+- **Lokal asboblar**: 1-darsda pipeline lokal modellashtiriladi, asboblar Docker konteynerida ishlaydi. `make` ikkala mashinada bor (macOS'da GNU Make 3.81, Zorin'da 4.x). `actionlint` konteyner shaklida ikkalasida ishlaydi.
+- **Secret'lar**: token, SSH private key, `.env` hech qachon commit qilinmaydi va README'ga yozilmaydi. Ular faqat CI tizimining secret omborida turadi (`gh secret set` stdin'dan o'qiydi). Pipeline uchun deploy kaliti alohida yaratiladi, shaxsiy kalit bilan aralashtirilmaydi.
+- **Tozalash**: har dars oxirida runner'lar ro'yxatdan chiqariladi, konteyner, volume va network'lar nomi bilan o'chiriladi (`docker system prune` ishlatilmaydi), sinov image'lari registry'dan, vaqtinchalik token'lar akkauntdan o'chiriladi. 5-dars oxirida VM, IAM role va OIDC provider o'chirilgani buyruq bilan tekshiriladi.
 
 ## I bosqich - Tushunchalar
 
