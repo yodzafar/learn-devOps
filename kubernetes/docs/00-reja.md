@@ -1,19 +1,21 @@
 # Kubernetes o'quv rejasi (konteyner orkestratsiyasi)
 
+Kim uchun: frontend dasturchi (TS/Node), backend va ops'ni endi o'rganmoqda. `docker`, `linux`, `network`, `cicd` va `observability` modullari o'tilgan deb olinadi; Kubernetes'ning o'zi (deklarativ model, controller'lar, Service mexanizmi, storage, RBAC) har darsda noldan, mexanizmi va ishlaydigan misoli bilan tushuntiriladi.
+
 Ishlash tartibi: men nazariya va vazifalar beraman, siz klasterda bajarib natijani ish papkasidagi `README.md` ga yozasiz, men tekshirib xato va tuzoqlarni ko'rsataman.
 Har dars uchun alohida papka: `kubernetes/01-intro/`, `kubernetes/02-cluster-setup/` va hokazo. Yaratish: `make new m=kubernetes n=01 name=intro`. Topshirishdan oldin `make check` toza bo'lishi shart.
 
 ## Vaqt hisobi
 
-Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan.
+Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan. Har darsning muddati o'sha darsning `Taxminiy vaqt` qatorida, bu jadval ularning yig'indisi. Hafta 5 o'quv kuni deb olinadi.
 
-| Bosqich | Darslar | Umumiy | Siz uchun | Sabab |
-|---------|---------|--------|-----------|-------|
-| I - Asoslar va klaster | 3 | 3 hafta | 2 hafta | Docker, tarmoq va YAML tanish; Docker modulida Swarm va kind bilan tanishuv bo'lgan. Deklarativ model va klaster yig'ish yangi |
-| II - Workload, tarmoq, storage, TLS | 5 | 4–5 hafta | 3–3.5 hafta | Probe, graceful shutdown, DNS, TLS tushunchalari oldingi modullardan tanish. Service mexanizmi va storage modeli yangi, qisqartirilmaydi |
-| III - Yetkazib berish | 2 | 2 hafta | 1.5 hafta | CI/CD moduli o'tilgan, pipeline yozish tajribasi bor. GitOps yangi |
-| IV - Production | 5 | 5–6 hafta | 4.5 hafta | Butunlay yangi soha: HA, stateful, xavfsizlik, autoscaling. Yakuniy loyiha shu yerda (5–6 kun) |
-| **Jami** | **15** | **14–16 hafta** | **11–12 hafta** | |
+| Bosqich | Darslar | Dars bo'yicha (kun) | Siz uchun | Sabab |
+|---------|---------|---------------------|-----------|-------|
+| I - Asoslar va klaster | 3 | 1-dars: 3, 2-dars: 4, 3-dars: 3 | 10 kun | Deklarativ model, arxitektura, kind, k3s va kubeadm bilan klaster yig'ish yangi. 2-darsda Multipass VM'lar |
+| II - Workload, tarmoq, storage, TLS | 5 | 4-dars: 4, 5-dars: 3, 6-dars: 4, 7-dars: 3, 8-dars: 3 | 17 kun | Probe, graceful shutdown, DNS, TLS oldingi modullardan tanish. Service mexanizmi, storage modeli va Helm yangi, qisqartirilmaydi |
+| III - Yetkazib berish | 2 | 9-dars: 3, 10-dars: 4 | 7 kun | CI/CD moduli o'tilgan. RBAC orqali pipeline kirishi va GitOps yangi |
+| IV - Production | 5 | 11-dars: 3, 12-dars: 4, 13-dars: 4, 14-dars: 3, 15-dars: 2 + yakuniy loyiha 5–6 | 21–22 kun | Butunlay yangi soha: HA, stateful, xavfsizlik, autoscaling, xarajat. Yakuniy loyiha shu yerda |
+| **Jami** | **15** | | **55–56 kun (taxminan 11 hafta)** | |
 
 Muhim izohlar:
 - Bir mavzuni "o'rgandim" deyish mezoni: vazifalar bajarilgan, men tekshirib tasdiqlaganman, va siz mavzuni o'z so'zingiz bilan tushuntira olasiz.
@@ -23,11 +25,23 @@ Muhim izohlar:
 
 ## Laboratoriya
 
-- **Asosiy muhit**: ish mashinasidagi Docker ustida kind klasteri (1 control-plane + 2 worker). Deyarli barcha darslar shu yerda. Tizimga faqat binary'lar o'rnatiladi: `kubectl`, `kind`, `helm`, `cloud-provider-kind` (LoadBalancer, Ingress va Gateway API uchun).
-- **Multipass VM'lar**: k3s va kubeadm bilan haqiqiy multi-node klaster (2-dars, keyin HA va stateful darslarida kerak bo'lganda). Paket, sysctl va kernel modulni o'zgartiradigan hamma narsa faqat VM ichida.
+Kurs ikki mashinada o'tiladi: ofisda Zorin OS 18 (`amd64`), uyda macOS (Apple Silicon, `arm64`). Docker va Multipass ikkalasida `SETUP.md` bo'yicha o'rnatilgan. Har darsning "Laboratoriya" bo'limida "Zorin (ofis) / macOS (uy)" jadvali bor.
+
+| Muhit | Zorin (ofis) | macOS (uy) | Qaysi darslarda |
+|-------|--------------|------------|-----------------|
+| kind klasteri (node'lar Docker konteyneri) | host'dagi Docker Engine'da, host kernel'ida, `amd64` | Docker Desktop'ning yashirin Linux VM'ida, `arm64` | deyarli hamma darslar (asosiy klaster nomi `dev`) |
+| Multipass VM'lar (k3s, kubeadm) | Ubuntu 24.04, `x86_64` | Ubuntu 24.04, `aarch64` | 2-dars, kerak bo'lganda 11 va 12-darslar |
+
+- **Asboblar** (faqat foydalanuvchi darajasidagi binary'lar): `kubectl`, `kind` (1-dars), `minikube` (2-dars), `helm` (8-dars), `cloud-provider-kind` (3 va 6-darslar), keyingi darslarda `argocd`, `flux` kabi CLI'lar. Zorin'da rasmiy `linux-amd64` binary `~/.local/bin` ga `sudo` siz, macOS'da Homebrew orqali. Har darsda o'rnatish ikki shaklda yozilgan.
+- **Node va LoadBalancer IP'lari**: Zorin'da kind node'larining `172.18.0.x` IP'lari va LoadBalancer IP'lari host'dan to'g'ridan-to'g'ri ochiladi. macOS'da ular Docker Desktop VM'i ichida, Mac'dan ko'rinmaydi. API server ikkalasida `https://127.0.0.1:<port>` orqali ishlaydi. Service'ga Mac'dan ikki yo'l bilan boriladi: `docker run --rm --network kind curlimages/curl:<tag> ...` (ikkala mashinada bir xil) yoki `cloud-provider-kind` port mapping (3 va 6-darslar).
+- **`cloud-provider-kind`**: Zorin'da foydalanuvchi `docker` guruhida bo'lsa `sudo` siz ishlaydi, ruxsat xatosi chiqsa `sudo` bilan. macOS'da loyiha hujjati bo'yicha `sudo cloud-provider-kind --enable-lb-port-mapping` (3-dars, Laboratoriya jadvali).
+- **Arxitektura**: ishlatiladigan image'lar multi-arch (`amd64` va `arm64`) bo'lishi kerak. Ishonch bo'lmasa `docker buildx imagetools inspect <image>:<tag>` bilan tekshiriladi; `arm64` versiyasi bo'lmagan image uchun dars muqobil beradi. `latest` tag ishlatilmaydi.
+- **Multipass VM'lar**: paket, sysctl, kernel modul va systemd unit'ni o'zgartiradigan hamma narsa (k3s, kubeadm, containerd sozlash) faqat VM ichida, host'da emas. `lab` VM bu modulda ishlatilmaydi, xotirani bo'shatish uchun `multipass stop lab`. Zorin'da Docker va Multipass bitta host'da: VM'lar internetga chiqmasa, sababi Docker'ning iptables `FORWARD` qoidalari bo'lishi mumkin (2-dars, Tuzoqlar).
+- **Resurs**: kind `dev` klasteri (1 control-plane + 2 worker) uchun 8 GB RAM yetarli; uchta Multipass VM uchun qo'shimcha 6–8 GB; 11-darsdagi uch control-plane'li klaster 4–5 GB. macOS'da Docker Desktop'ga ajratilgan xotira chegarasi bor (`docker info` dagi `Total Memory`). Klasterlarni bir vaqtda emas, ketma-ket ishlating.
+- **Ikkinchi mashinada tiklash**: klasterlar, VM'lar va ulardagi holat mashinalar orasida ko'chmaydi. Ko'chadigan narsa faqat git'dagi fayllar (kind config'lari, manifestlar, values fayllari, skriptlar, README). Ikkinchi mashinada `git pull`, keyin `kind create cluster --name dev` (yoki darsdagi config bilan) va kerakli addon'larni darsdagi buyruqlar bilan qayta o'rnatish. Ko'p qadamli klaster (kubeadm, HA) kerak bo'lgan guruhni bitta mashinada boshidan oxirigacha tugatgan ma'qul.
 - **Cloud**: majburiy emas. Managed klaster (EKS va boshqalar) va ommaviy Let's Encrypt sertifikati ixtiyoriy vazifalar; bajarilsa budget alert, eng kichik resurs, shu kunning o'zida o'chirish va o'chirilganini tekshirish shart.
-- **Resurs**: kind uchun 8 GB RAM yetarli; uchta Multipass VM uchun qo'shimcha 6–8 GB. Klasterlarni bir vaqtda emas, ketma-ket ishlating.
-- **Maxfiy ma'lumot**: kubeconfig, join token, Secret manifesti, yopiq kalit va sertifikatlar ish papkasiga yozilmaydi va commit qilinmaydi.
+- **Maxfiy ma'lumot**: kubeconfig, join token, Secret manifesti, yopiq kalit va sertifikatlar ish papkasiga yozilmaydi va commit qilinmaydi. Secret qiymatlari fayldan yoki stdin'dan beriladi, shell history'ga yozilmaydi.
+- **Tozalash**: har dars oxirida yaratilgan klaster, VM va namespace'lar o'chiriladi va tekshiriladi (`kind get clusters`, `multipass list`, `kubectl get ns`). Ikkala mashinada boshqa loyihalarning konteynerlari bor: `docker system prune` ishlatilmaydi.
 
 ## I bosqich - Asoslar va klaster
 1. **Kubernetes'ga kirish**: nima uchun kerak, arxitektura (API server, etcd, scheduler, controller manager, kubelet, kube-proxy, container runtime), deklarativ model va reconciliation loop, obyektlar va YAML anatomiyasi (`apiVersion`, `kind`, `metadata`, `spec`, `status`), `kubectl` asoslari, kubeconfig va context, namespace, label va selector

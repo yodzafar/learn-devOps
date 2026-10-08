@@ -1,18 +1,20 @@
 # Observability moduli rejasi (metrics, logs, traces, profiles, OpenTelemetry)
 
+Kim uchun: frontend dasturchi (TS/Node), backend va ops'ni endi o'rganmoqda. Chrome DevTools, `console.log` va pino kabi structured logging tanish bo'lishi mumkin; time series, pull modeli, PromQL, label cardinality, context propagation va sampling yangi mavzu deb olinadi va har darsda noldan tushuntiriladi. `linux`, `network` va `docker` modullari oldindan o'tilgan bo'lishi kerak.
+
 Ishlash tartibi: men nazariya va vazifalar beraman, siz stack'ni `compose.yaml` va config fayllar bilan o'zingiz yig'asiz, so'rovlarni (PromQL, LogQL, TraceQL) o'zingiz yozasiz, men tekshirib xatolar, xavfsizlik va idiomalarni ko'rsataman.
 Har dars uchun alohida papka: `observability/01-prometheus/`, `observability/02-grafana/` va hokazo. Yaratish: `make new m=observability n=01 name=prometheus`. Bu papkalarda javoblar (`README.md`) turadi; stack'ning o'zi bitta umumiy papkada o'sib boradi: `observability/stack/` (pastda).
 
 ## Vaqt hisobi
 
-Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan.
+Hisob kuniga 2–2.5 soat muntazam mashg'ulot va vazifalarni to'liq bajarish sharti bilan. Har darsning muddati o'sha darsning `Taxminiy vaqt` qatorida, bu jadval ularning yig'indisi. Hafta 5 o'quv kuni deb olinadi.
 
-| Bosqich | Darslar | Muddat (2–2.5 soat/kun) | Siz uchun | Sabab |
-|---------|---------|--------------------------|-----------|-------|
-| I - Metrics va alerting | 3 | 11–12 kun | 9 kun | Dashboard va grafik o'qish tanish, Grafana UI tez o'zlashadi. Yangi: pull modeli, time series va label'lar, PromQL (`rate`, `histogram_quantile`), cardinality, Alertmanager routing, SLO burn rate. PromQL qisqartirilmaydi |
-| II - Logs, traces, profiles | 3 | 10–11 kun | 8 kun | Structured logging (pino), HTTP header'lar, Chrome DevTools flame chart tanish. Yangi: Loki label modeli, LogQL, context propagation, sampling, continuous profiling |
-| III - OpenTelemetry va mini-loyiha | 1 | 5 kun | 4 kun | Node.js'da instrumentation yozish oson. Yangi: Collector pipeline'lari, semantic conventions, uch signalni bitta yo'ldan o'tkazish. Mini-loyiha shu yerda |
-| **Jami** | **7** | **5–5.5 hafta** | **4 hafta (21 kun)** | |
+| Bosqich | Darslar | Dars bo'yicha (kun) | Siz uchun | Sabab |
+|---------|---------|---------------------|-----------|-------|
+| I - Metrics va alerting | 3 | 1-dars: 6, 2-dars: 3, 3-dars: 5 | 14 kun | Dashboard va grafik o'qish tanish, Grafana UI tez o'zlashadi. Yangi: pull modeli, time series va label'lar, PromQL (`rate`, `histogram_quantile`), cardinality, Alertmanager routing, SLO burn rate. PromQL qisqartirilmaydi |
+| II - Logs, traces, profiles | 3 | 4-dars: 5, 5-dars: 5, 6-dars: 3 | 13 kun | Structured logging (pino), HTTP header'lar, Chrome DevTools flame chart tanish. Yangi: Loki label modeli, LogQL, inverted index, context propagation, sampling, continuous profiling |
+| III - OpenTelemetry va mini-loyiha | 1 | 7-dars: 6 | 6 kun | Node.js'da instrumentation yozish oson. Yangi: Collector pipeline'lari, semantic conventions, uch signalni bitta yo'ldan o'tkazish. Mini-loyiha shu yerda |
+| **Jami** | **7** | | **33 kun (6 hafta va 3 kun)** | |
 
 Bir darsni "o'rgandim" deyish mezoni: vazifalar bajarilgan, men tekshirib tasdiqlaganman, stack to'xtatilgan va siz mexanizmni o'z so'zingiz bilan tushuntira olasiz. Vaqt yetmasa birinchi qisqaradigan dars: 6-dars (profiling), u holda faqat A va B guruh vazifalari bajariladi.
 
@@ -29,6 +31,17 @@ Monitoring oldindan ma'lum savollarga javob beradi ("disk to'ldimi?"). Observabi
 
 ## Laboratoriya
 
+Kurs ikki mashinada o'tiladi: ofisda Zorin OS 18 (`amd64`), uyda macOS (Apple Silicon, `arm64`). Docker ikkalasida `SETUP.md` bo'yicha o'rnatilgan. Har darsning "Laboratoriya" bo'limida "Zorin (ofis) / macOS (uy)" jadvali bor.
+
+| | Zorin (ofis) | macOS (uy) |
+|---|--------------|------------|
+| Docker | Docker Engine, host kernel'ida, image'lar `amd64` | Docker Desktop, engine yashirin Linux VM ichida, image'lar `arm64` |
+| Xotira | konteynerlar host RAM'idan to'g'ridan-to'g'ri foydalanadi | Docker Desktop VM'iga ajratilgan chegara bor (`docker info` dagi `Total Memory`), to'liq stack uchun kamida 4 GB, Elasticsearch bilan 6 GB |
+| `node-exporter`, `cadvisor` | Zorin host'ining o'zini o'lchaydi | Mac'ni emas, Docker Desktop VM'ini o'lchaydi (1-dars bu farqni tushuntiradi) |
+| Konteyner log fayllari (`/var/lib/docker/containers`) | host'da bor, root o'qiydi | VM ichida, Mac'dan ko'rinmaydi; log'lar Docker API (`docker.sock`) orqali yig'iladi, bu ikkala mashinada bir xil (4-dars) |
+| `host.docker.internal` | Compose servisiga `extra_hosts: ["host.docker.internal:host-gateway"]` qo'shilsa ishlaydi | tayyor |
+
+- `lab` VM bu modulda ishlatilmaydi: stack uning 2G xotirasiga sig'maydi.
 - Barcha vazifalar ish mashinasidagi Docker Compose'da bajariladi. Ish mashinasiga hech narsa o'rnatilmaydi: `promtool`, `amtool`, `logcli` kabi CLI'lar tegishli konteyner ichidan (`docker compose exec`) ishlatiladi.
 - **Yagona stack papkasi**: `observability/stack/`. Ichida `compose.yaml`, har komponent uchun config papkasi (`prometheus/`, `grafana/`, `alertmanager/`, `loki/`, `alloy/`, `tempo/`, `otelcol/`) va namuna ilova (`app/`). Har dars shu stack'ga servis qo'shadi, oldingisini buzmaydi:
 
@@ -43,10 +56,12 @@ Monitoring oldindan ma'lum savollarga javob beradi ("disk to'ldimi?"). Observabi
 | 7 | `otelcol` (OpenTelemetry Collector), yakuniy tozalash va mini-loyiha |
 
 - Og'ir servislar (Elasticsearch, Kibana, Jaeger) Compose `profiles` ostida turadi va faqat kerak bo'lganda yoqiladi. To'liq stack taxminan 3–4 GB RAM oladi, Elasticsearch yoqilganda yana 1–2 GB. `docker stats` bilan kuzating.
-- Image versiyalari: `latest` ishlatilmaydi. Har komponent uchun release sahifasidan joriy barqaror versiyani olib, `compose.yaml` da aniq tag bilan yozasiz. Darslarda versiya raqami ataylab berilmagan, chunki bu asboblar tez o'zgaradi.
+- Portlar host'ga faqat `127.0.0.1` ga bog'lab publish qilinadi (`"127.0.0.1:3000:3000"`), aks holda UI'lar ofis tarmog'idagi hammaga ochiladi.
+- Image versiyalari: `latest` ishlatilmaydi. Image ikkala arxitekturada (`amd64`, `arm64`) borligi registry sahifasidagi "OS/Arch" ro'yxatidan tekshiriladi. Har komponent uchun release sahifasidan joriy barqaror versiyani olib, `compose.yaml` da aniq tag bilan yozasiz. Darslarda versiya raqami ataylab berilmagan, chunki bu asboblar tez o'zgaradi.
 - `node-exporter` va `cadvisor` host fayl tizimini faqat o'qish uchun mount qiladi, `alloy` esa `docker.sock` ni. Bu ish mashinasini o'zgartirmaydi, lekin `docker.sock` ga kirish amalda root huquqi ekanini eslang (docker moduli, 1-dars).
 - Secret'lar (Telegram bot token, Grafana admin paroli) `.env` yoki alohida faylda, `.gitignore` da. `compose.yaml` va config'lar commit qilinadi, secret va ma'lumot volume'lari yo'q.
-- Har mashg'ulot oxirida `docker compose down` (volume'lar qoladi), modul oxirida `docker compose down -v` va `docker volume ls` bilan tekshirish.
+- **Ikkinchi mashinada tiklash**: `compose.yaml`, config'lar, provisioning fayllari va ilova kodi git orqali ko'chadi; metrika, log va trace ma'lumotlari volume'da qoladi va ko'chmaydi. Ikkinchi mashinada `git pull`, commit qilinmagan `.env` ni qayta yaratish, `docker compose up -d --build` va `loadgen` yangi ma'lumot hosil qilguncha bir necha daqiqa kutish. Oldingi mashinadagi trace ID'lar va tarixiy grafiklar bu yerda bo'lmaydi, bu normal.
+- Har mashg'ulot oxirida `docker compose down` (volume'lar qoladi), modul oxirida `docker compose down -v` va `docker volume ls` bilan tekshirish. Ikkala mashinada boshqa loyihalarning konteyner va volume'lari bor: `docker system prune` va `docker volume prune -a` ishlatilmaydi, keraksiz volume nomi bilan o'chiriladi.
 
 ## I bosqich - Metrics va alerting
 
