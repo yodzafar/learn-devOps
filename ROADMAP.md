@@ -7,8 +7,9 @@ Manba: kurs rejasi (Google Form, "Kurs rejasi"). Formadagi har mavzu bitta darsg
 ## Hisob asoslari
 
 - Kuniga 2–2.5 soat, haftada 5 kun. Shanba: hafta qarzini yopish va o'tilganni takrorlash. Yakshanba: dam.
-- Sizning foningiz (Senior Frontend, TS/Node) hisobga olingan: terminal, git va HTTP tanish, shuning uchun Git va Docker asoslari qisqa. Tarmoq, Linux ichki tuzilishi, IaC va Kubernetes qisqartirilmagan.
-- Jami: **42 hafta (taxminan 10 oy)**: 200 ish kuni va har modul oxirida bir necha kun zaxira. Kuniga 4–5 soat bo'lsa 5 oy.
+- Sizning foningiz: frontend dasturchi (TS/Node, 6–7 yil), backend va ops'ni endi o'rganmoqdasiz. Terminal, git va HTTP tanish bo'lsa ham, backend va ops tushunchalari har darsda noldan, mexanizmi va ishlaydigan misoli bilan tushuntiriladi (CLAUDE.md, "Batafsillik"). Shuning uchun hech bir modul "tanish" deb qisqartirilmagan; Node/frontend tajribasi faqat o'xshatish haqiqiy bo'lgan joyda ishlatiladi.
+- Har dars ikki mashinada (ofisda Zorin, uyda macOS) to'liq bajariladi, shuning uchun darslarga ikki mashina farqlari va laboratoriyani qayta tiklash ham kiradi.
+- Jami: **64 hafta (taxminan 15 oy)**: 294 ish kuni (320 kunlik sig'imdan), qolgan 26 kun modullar orasida zaxira. Kuniga 4–5 soat bo'lsa taxminan 7–8 oy.
 - Bu loyiha `learn-golang` va `learn-pyhton` bilan parallel ketadi. Uchalasiga vaqt yetmasa, shu jadval cho'ziladi, darslar qisqartirilmaydi.
 - Qoida: dars "tugadi" deyilishi uchun vazifalar bajarilgan, `make check` toza, Claude tekshirgan, o'zini tekshirish savollariga og'zaki javob bera olasiz.
 
@@ -29,21 +30,21 @@ Tartibni o'zgartirish mumkin bo'lgan joylar: `git` ni `linux` 5-darsdan keyin pa
 
 ## Vaqt chizig'i
 
-| Hafta | Modul | Darslar | Bosqich yakuni |
+| Hafta | Modul | Darslar (ish kuni) | Bosqich yakuni |
 |---|---|---|---|
-| 1–3 | linux | 1–7: kirish, distributivlar, asosiy buyruqlar, muharrirlar, shell, fayllar, matn | |
-| 4–7 | linux | 8–13: resurslar, jarayonlar, userlar, systemd, paketlar, disklar | **Linux tugadi** |
-| 8–9 | git | 1–4: commit modeli, branch va merge, remote va PR, hosting'lar | **Git tugadi** |
-| 10–13 | network | 1–6: tarmoq turlari, OSI, IP va subnetting, protokollar, routing, firewall/NAT/VPN | **Tarmoq tugadi. Serverni qo'lda sozlay olasiz** |
-| 14–17 | docker | 1–5: konteynerlar, image'lar, volume va tarmoq, Compose, orchestration'ga kirish | **Docker tugadi** |
-| 18–20 | cloud | 1–4: provayderlar, birinchi sozlash, VM/tarmoq/S3, qo'lda deploy | **Cloud tugadi. Ilova internetda ishlaydi** |
-| 21–24 | cicd | 1–5: kirish, GitHub Actions, GitLab CI, Jenkins/TeamCity, avtomatik deploy | **CI/CD tugadi. Junior DevOps vazifalariga tayyor** |
-| 25–28 | iac | 1–5: kirish, Ansible asoslari, rollar, Terraform asoslari, state va modullar | **IaC tugadi** |
-| 29–32 | observability | 1–7: Prometheus, Grafana, alerting, logging, tracing, profiling, OpenTelemetry | **Observability tugadi** |
-| 33–37 | kubernetes | 1–8: kirish, klaster, birinchi deploy, workload'lar, Job, Service, storage, cert-manager | |
-| 38–42 | kubernetes | 9–15: CI/CD integratsiya, GitOps, HA, stateful, xavfsizlik, autoscaling, cost + yakuniy loyiha | **Kurs tugadi** |
+| 1–6 | linux | 1–7: kirish, distributivlar, asosiy buyruqlar, muharrirlar, shell, fayllar, matn (28) | |
+| 7–11 | linux | 8–13: resurslar, jarayonlar, userlar, systemd, paketlar, disklar (22) | **Linux tugadi** |
+| 12–15 | git | 1–4: commit modeli, branch va merge, remote va PR, hosting'lar (18) | **Git tugadi** |
+| 16–22 | network | 1–6: tarmoq turlari, OSI, IP va subnetting, protokollar, routing, firewall/NAT/VPN (32) | **Tarmoq tugadi. Serverni qo'lda sozlay olasiz** |
+| 23–28 | docker | 1–5: konteynerlar, image'lar, volume va tarmoq, Compose, orchestration'ga kirish (27) | **Docker tugadi** |
+| 29–32 | cloud | 1–4: provayderlar, birinchi sozlash, VM/tarmoq/S3, qo'lda deploy (20) | **Cloud tugadi. Ilova internetda ishlaydi** |
+| 33–38 | cicd | 1–5: kirish, GitHub Actions, GitLab CI, Jenkins/TeamCity, avtomatik deploy (27) | **CI/CD tugadi. Junior DevOps vazifalariga tayyor** |
+| 39–45 | iac | 1–5: kirish, Ansible asoslari, rollar, Terraform asoslari, state va modullar (31) | **IaC tugadi** |
+| 46–52 | observability | 1–7: Prometheus, Grafana, alerting, logging, tracing, profiling, OpenTelemetry (33) | **Observability tugadi** |
+| 53–58 | kubernetes | 1–8: kirish, klaster, birinchi deploy, workload'lar, Job, Service, storage, cert-manager (27) | |
+| 59–64 | kubernetes | 9–15: CI/CD integratsiya, GitOps, HA, stateful, xavfsizlik, autoscaling, cost (23) + yakuniy loyiha (5–6) | **Kurs tugadi** |
 
-Hisob darslardagi "Taxminiy vaqt" yig'indisidan: linux 31 kun, git 11, network 20, docker 17, cloud 13, cicd 18, iac 20, observability 21, kubernetes 49. Jami 200 ish kuni, 1307 vazifa.
+Hisob darslardagi "Taxminiy vaqt" yig'indisidan (2026-10-08 da, barcha darslar batafsil formatga o'tkazilgach qayta hisoblangan): linux 50 kun, git 18, network 32, docker 27, cloud 20, cicd 27, iac 31, observability 33, kubernetes 50 + yakuniy loyiha 6. Jami 294 ish kuni, 1307 vazifa. Har qatordagi haftalar soni kunlarni 5 ga bo'lib yuqoriga yaxlitlangan; ortib qolgan kunlar shu bosqichning zaxirasi.
 
 ## Haftalik ritm
 
@@ -57,14 +58,14 @@ Hisob darslardagi "Taxminiy vaqt" yig'indisidan: linux 31 kun, git 11, network 2
 
 | Hafta | Nima bo'lishi kerak |
 |---|---|
-| 7 | Yangi Ubuntu serverga SSH bilan kirib: user, sudo, systemd servis, paket, disk va log bilan ishlay olasiz. "Server sekin" degan shikoyatni 60 soniyada birlamchi tahlil qila olasiz |
-| 13 | Subnetni qo'lda hisoblaysiz, DNS/TCP muammosini `dig`, `ss`, `tcpdump` bilan ajratasiz, firewall va WireGuard sozlay olasiz |
-| 17 | Node/Go ilovani kichik, non-root, multi-stage image'ga yig'ib, Compose'da DB va reverse proxy bilan ko'tarasiz |
-| 20 | Ilova cloud VM'da TLS bilan ishlaydi, hech qanday ortiqcha resurs qolmagan, budget alert yoqilgan |
-| 24 | `main` ga push → test → image → deploy → smoke test, rollback mashq qilingan |
-| 28 | Butun muhit `terraform apply` + `ansible-playbook` bilan noldan ko'tariladi va bir buyruq bilan o'chadi |
-| 32 | Ilovada metrika, log, trace va profil bor; alert kelganda sababni dashboard → log → trace orqali topasiz |
-| 42 | Ilova multi-node klasterda GitOps orqali deploy qilingan: TLS, autoscaling, network policy, backup/restore, xarajat bahosi bilan |
+| 11 | Yangi Ubuntu serverga SSH bilan kirib: user, sudo, systemd servis, paket, disk va log bilan ishlay olasiz. "Server sekin" degan shikoyatni 60 soniyada birlamchi tahlil qila olasiz |
+| 22 | Subnetni qo'lda hisoblaysiz, DNS/TCP muammosini `dig`, `ss`, `tcpdump` bilan ajratasiz, firewall va WireGuard sozlay olasiz |
+| 28 | Node/Go ilovani kichik, non-root, multi-stage image'ga yig'ib, Compose'da DB va reverse proxy bilan ko'tarasiz |
+| 32 | Ilova cloud VM'da TLS bilan ishlaydi, hech qanday ortiqcha resurs qolmagan, budget alert yoqilgan |
+| 38 | `main` ga push → test → image → deploy → smoke test, rollback mashq qilingan |
+| 45 | Butun muhit `terraform apply` + `ansible-playbook` bilan noldan ko'tariladi va bir buyruq bilan o'chadi |
+| 52 | Ilovada metrika, log, trace va profil bor; alert kelganda sababni dashboard → log → trace orqali topasiz |
+| 64 | Ilova multi-node klasterda GitOps orqali deploy qilingan: TLS, autoscaling, network policy, backup/restore, xarajat bahosi bilan |
 
 ## Agar vaqt yetmasa
 
@@ -81,10 +82,10 @@ Qisqartirilmaydi: `linux` to'liq, `network` 3–6, `docker` 1–4, `cloud` 2–4
 
 - Boshlangan sana: 2026-10-05 (loyiha tuzilmasi, rejalar va darslar yozildi)
 - Joriy bosqich: `linux`, 1-hafta
-- [ ] Hafta 1–3: linux 1–7. Hozir 1-dars (`linux/docs/01-intro.md` → `linux/01-intro/`)
-- [ ] Hafta 4–7: linux 8–13
+- [ ] Hafta 1–6: linux 1–7. Hozir 1-dars (`linux/docs/01-intro.md` → `linux/01-intro/`)
+- [ ] Hafta 7–11: linux 8–13
 - Batafsil holat: `PROGRESS.md` (indeks) va `linux/docs/PROGRESS.md`
-- Darslar holati: 64 darsdan 26 tasi yangi (batafsil, ikki mashinaga mos) formatda: linux 1–13 (modul to'liq); git 1–4 (modul to'liq); network 1–6 (modul to'liq); cloud 1; iac 1, 3. Qolgan 38 tasi hali birinchi variantda. Hammasi o'tkazilgach vaqt chizig'i qayta hisoblanadi (darslar vaqti taxminan 1.5 baravar oshadi).
+- Darslar holati: 64 darsning hammasi yangi (batafsil, ikki mashinaga mos) formatda. Vaqt chizig'i 2026-10-08 da shunga moslab qayta hisoblandi (200 kundan 294 kunga, 42 haftadan 64 haftaga).
 
 ### Temp: reja bilan solishtirish
 
